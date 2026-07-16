@@ -91,8 +91,10 @@ class SyntheticCamera:
         visible, u, v, depth = self.project(pan, tilt, target)
         bbox = None
         if visible:
-            r = max(2, int(self.f * self.drone_size / depth / 2.0))   # perspective radius [px]
-            bbox = self._draw_drone(img, int(round(u)), int(round(v)), r)
+            size = self.f * self.drone_size / depth                   # true projected size [px] (float)
+            r = max(2, int(round(size / 2.0)))                        # int radius for the drawn sprite
+            self._draw_drone(img, int(round(u)), int(round(v)), r)
+            bbox = (u - size / 2.0, v - size / 2.0, size, size)       # accurate ground-truth bbox
         self._add_noise(img)
         return img, visible, (u, v), bbox
 
