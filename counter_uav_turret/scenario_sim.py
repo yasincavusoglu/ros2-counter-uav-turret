@@ -107,13 +107,15 @@ class SyntheticCamera:
         return np.repeat(rows[:, None, :], self.w, axis=1).astype(np.uint8)
 
     def _draw_drone(self, img, u, v, r):
-        """Draw a small dark quadrotor silhouette; return its bbox (x, y, w, h)."""
+        """Draw a CONNECTED dark quadrotor (one blob) whose bbox is ~2r x 2r (matches true size)."""
         body = (40, 40, 45)
-        cv2.ellipse(img, (u, v), (r, max(1, r // 2)), 0, 0, 360, body, -1)
-        for dx, dy in ((-r, -r), (r, -r), (-r, r), (r, r)):           # 4 rotors
-            cv2.circle(img, (u + dx, v + dy), max(1, r // 2), body, -1)
-        s = 2 * r
-        return (u - r, v - r, s, s)
+        rr = max(1, r // 3)
+        arm = max(1, (2 * r) // 3)          # rotor offset so total extent stays within +/- r
+        for dx, dy in ((-arm, -arm), (arm, -arm), (-arm, arm), (arm, arm)):
+            cv2.line(img, (u, v), (u + dx, v + dy), body, max(1, r // 3))  # arms connect it
+            cv2.circle(img, (u + dx, v + dy), rr, body, -1)               # 4 rotors
+        cv2.circle(img, (u, v), max(2, r // 2), body, -1)                 # hub
+        return (u - r, v - r, 2 * r, 2 * r)
 
     def _add_noise(self, img):
         noise = self._rng.normal(0, 3.0, img.shape).astype(np.float32)
