@@ -1,0 +1,5 @@
+# Python deps (ROS 2 Humble provides rclpy, cv_bridge, message packages)
+numpy
+opencv-python
+ultralytics        # YOLOv8/v11 detector
+matplotlib         # hmi_telemetry live plots
