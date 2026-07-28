@@ -1,5 +1,10 @@
 # ros2-counter-uav-turret
 
+[![tests](https://github.com/yasincavusoglu/ros2-counter-uav-turret/actions/workflows/tests.yml/badge.svg)](https://github.com/yasincavusoglu/ros2-counter-uav-turret/actions/workflows/tests.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![ROS 2](https://img.shields.io/badge/ROS%202-Humble-blue.svg)](https://docs.ros.org/en/humble/)
+[![python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+
 A ROS 2 simulation of an **autonomous counter-UAS (anti-drone) turret**: it detects a maneuvering aerial
 target, tracks it, estimates its state, keeps a **stabilized pan/tilt gimbal locked on it**, and computes a
 **lead (intercept) aim-point** for the fire solution — with an engagement state machine and safety interlocks.
@@ -9,7 +14,7 @@ End-to-end, closed-loop, runs headless (no hardware required).
 > team captain on an autonomous turret project (field-tested across 70+ recorded runs). The original
 > competition code is private; this repository is an independent, public implementation of the same engineering.
 
-> ✅ **Runs end-to-end** with no hardware: `python3 scripts/run_demo.py`. All nine nodes are implemented and
+> **Runs end-to-end** with no hardware: `python3 scripts/run_demo.py`. All nine nodes are implemented and
 > unit-tested (29 tests); the numbers in [Results](#results) are measured, not placeholders.
 
 ![demo](docs/demo.png)
@@ -42,15 +47,15 @@ scenario_sim --/camera/image--> detector --/detections--> tracker --/tracks--> e
 
 | Node | Role | Status |
 |------|------|--------|
-| `scenario_sim`   | maneuvering aerial target + synthetic camera + ground truth | ✅ |
-| `detector`       | YOLOv8/v11 target detection | ✅ |
-| `tracker`        | ByteTrack multi-object tracking | ✅ |
-| `estimator`      | 6D Kalman (adaptive-Q, chi² gating, NIS) — C++ core | ✅ |
-| `lead_solver`    | intercept/lead aim-point for a moving target | ✅ |
-| `gimbal_control` | pan/tilt PID + stabilization (ros2_control) | ✅ |
-| `turret_plant`   | 2nd-order gimbal dynamics (sim) | ✅ |
-| `engagement_fsm` | SEARCH → TRACK_LOCK → ENGAGE + safety interlocks | ✅ |
-| `hmi_telemetry`  | live plots, JSONL logs, demo recording | ✅ |
+| `scenario_sim`   | maneuvering aerial target + synthetic camera + ground truth | Implemented |
+| `detector`       | YOLOv8/v11 target detection | Implemented |
+| `tracker`        | ByteTrack multi-object tracking | Implemented |
+| `estimator`      | 6D Kalman (adaptive-Q, chi² gating, NIS) — C++ core | Implemented |
+| `lead_solver`    | intercept/lead aim-point for a moving target | Implemented |
+| `gimbal_control` | pan/tilt PID + stabilization (ros2_control) | Implemented |
+| `turret_plant`   | 2nd-order gimbal dynamics (sim) | Implemented |
+| `engagement_fsm` | SEARCH → TRACK_LOCK → ENGAGE + safety interlocks | Implemented |
+| `hmi_telemetry`  | live plots, JSONL logs, demo recording | Implemented |
 
 ## The lead-angle solver (why it matters)
 Static aim fails on a moving target. Given the estimated target state and the effector time-of-flight, the
